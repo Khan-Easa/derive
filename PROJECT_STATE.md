@@ -111,6 +111,39 @@ verification strategy:
 - **Category E — Notational/structural:** SymPy substitution check, 
   fallback to LLM judge
 
+  **Role of the Method/Context field (user input):**
+
+The third user input — "Method / Context" — is the primary mechanism 
+for providing the LLM with:
+
+1. **Method guidance:** Which technique to apply (e.g., "using Fourier 
+   Transform", "via calculus of variations", "by vector identity"). 
+   Shapes the derivation path the LLM takes.
+2. **Physical or contextual assumptions:** Premises the user accepts 
+   as given (e.g., "in free space, ∇·E = 0", "steady-state", 
+   "small-angle approximation", "ideal gas"). Injected into the 
+   prompt as premises for the derivation.
+
+**Key design decision:** User-stated assumptions are treated as 
+**premises, not conclusions.** The verifier does not judge whether 
+an assumption is physically reasonable in the broader sense — that 
+responsibility sits with the user. The system's verification job is 
+narrower: given the stated premises, is each step a valid 
+transformation?
+
+**Implications:**
+
+- Keeps Category D (physical/contextual assumptions) small and 
+  tractable. The LLM judge only checks that stated assumptions are 
+  applied correctly within the derivation — not that they are 
+  appropriate for the problem in general.
+- Mirrors how textbook derivations work: assumptions are stated, 
+  then derivations proceed from them. The tool does not try to 
+  second-guess the user's framing.
+- Sets honest user expectations. The UI should make clear (in 
+  Section 4 or polish phase) that the system verifies logical 
+  consistency given premises, not premise validity itself.
+
 **LLM output format:** Dual representation — each step includes 
 both LaTeX (for display) and SymPy-compatible expressions (for 
 verification). LLM generates both; SymPy parses the SymPy form 
