@@ -67,7 +67,11 @@ implemented as a UI toggle in the frontend).
 ### 2.2 Architecture
 
 **Three-tier architecture:**
-- Frontend: React (JSX) with KaTeX — already built, single-file
+- Frontend: React (JSX) with KaTeX — already built as a single-file 
+  component; to be converted to a proper Vite + React project in Section 4
+- **Design reference:** A Streamlit prototype (`app.py`) exists as an 
+  earlier design iteration. It is not the production frontend — React 
+  is. The Streamlit version is kept as a design reference only.
 - Backend: Python 3.11+ with FastAPI — to be built
 - Data layer: ChromaDB (vectors) + SQLite→PostgreSQL (relational)
 
@@ -134,6 +138,7 @@ response; KaTeX converts them to visual math before display. SymPy
 expressions are internal to the backend only — used for verification, 
 never shown to the user. The user sees formatted equations, not raw 
 LaTeX source.
+
 
 ### 2.5 Tech Stack
 
