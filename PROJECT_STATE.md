@@ -1,6 +1,6 @@
 # Derivé — Project State
 
-**Last updated:** 2026-04-21  
+**Last updated:** 2026-04-22  
 **Current section:** Section 1 complete, ready for Section 2
 
 ---
@@ -127,6 +127,13 @@ difficult steps.
 **Product decision:** Unverified steps are shown with a visible 
 status indicator, not silently trusted. Honest flagging is a 
 feature, not a bug.
+
+**User-facing output format:** The frontend displays rendered mathematical 
+notation via KaTeX. The backend sends LaTeX strings as part of the API 
+response; KaTeX converts them to visual math before display. SymPy 
+expressions are internal to the backend only — used for verification, 
+never shown to the user. The user sees formatted equations, not raw 
+LaTeX source.
 
 ### 2.5 Tech Stack
 
