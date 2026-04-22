@@ -1,7 +1,7 @@
 # Derivé — Project State
 
-**Last updated:** 2026-04-22  
-**Current section:** Section 1 complete, ready for Section 2
+**Last updated:** 2026-04-22
+**Current section:** Section 2 — SymPy feasibility spike (in progress)
 
 ---
 
@@ -253,9 +253,9 @@ this document.
 
 ## 4. Current Status
 
-**In progress:** None — between sections.  
+**In progress:** Section 2 — SymPy feasibility spike (infrastructure phase complete).  
 **Completed:** Planning phase, Section 1 (project setup and repository structure).  
-**Next:** Section 2 — SymPy feasibility spike.
+**Next:** Author 3 test derivations, then set up DeepSeek, then run Experiment 1.
 
 ---
 
@@ -325,6 +325,68 @@ and tooling baseline for the entire project.
 - `uv init` auto-initialized git (newer uv behavior) — merged with our 
   plan rather than conflicting with it
 
+
+---
+
+### Section 2 — SymPy feasibility spike (in progress)
+**Started:** 2026-04-22
+
+**Goal:** Validate the verification architecture in Section 2.4 by 
+testing its load-bearing assumptions before building production code 
+on top of it.
+
+**Progress so far — infrastructure phase:**
+- Anthropic API account set up with $10 credit balance
+- API key stored in `.env`, verified gitignored (line 67 of .gitignore)
+- `anthropic==0.96.0` and `python-dotenv==1.2.2` added as dependencies
+- `spike/` folder created at repo root for throwaway spike code
+- `spike/verify_anthropic.py` confirms Anthropic API works end-to-end
+- First successful API call completed against `claude-sonnet-4-6`
+
+**Key decisions made:**
+- **Spike scope — four experiments.** (1) LLM LaTeX-to-SymPy 
+  translation quality, (2) SymPy equivalence reliability on 
+  equivalent/non-equivalent expression pairs, (3) end-to-end step 
+  generation and verification, (4) actual category (A/B/C/D/E) 
+  distribution audit. Experiments 1 and 2 run first; 3 and 4 only 
+  if 1 and 2 clear.
+- **Success thresholds (preliminary, revisable).** Green/yellow/red 
+  rubric per experiment: Experiment 1 at ≥90% parse / ≥80% semantic 
+  match is green; Experiment 2 at ≥95% true-positive rate is green; 
+  Experiment 3 at ≥70% full-derivation verification is green; 
+  Experiment 4 at ≥60% A+B+C share is green.
+- **Test set sourcing.** Derivations will be hand-authored from 
+  canonical textbooks (Griffiths, Boas, Strang, Taylor) where the 
+  ground truth is already established in print. Working around 
+  physics rustiness by selecting mostly-algebraic-with-physics-
+  layered-on derivations and cross-checking with Claude. Spike 
+  test set is separate from and smaller than the eventual corpus.
+- **Slice strategy.** Build 3 test derivations first, validate the 
+  Experiment 1 pipeline on them, then scale to 15–20 only if the 
+  pipeline works. Avoids authoring a large test set on a broken 
+  measurement apparatus.
+- **Models to compare.** DeepSeek (per original Section 2.3 plan) 
+  against Claude Sonnet 4.6, run on the same test set. Divergence 
+  between models is itself a meaningful finding for the primary-model 
+  decision.
+- **DeepSeek setup deferred.** Anthropic infrastructure validated 
+  first; DeepSeek to be set up just before Experiment 1 runs. 
+  Avoids dual-provider setup friction upfront.
+- **Model selection open.** Original plan specified DeepSeek R1. 
+  DeepSeek has since released R2 (newer reasoner) and V3.2 (unified 
+  model). Exact DeepSeek model for the spike to be chosen at setup 
+  time.
+
+**Next up:**
+- Author Maxwell's → wave equation test derivation (from Griffiths 
+  Ch. 9.2) together as a worked example
+- Author 2 more test derivations independently (classical mechanics 
+  and calculus)
+- Validate test case schema and data shape
+- DeepSeek API setup
+- Write Experiment 1 script, run on 3-derivation sample
+- Scale to 15–20 derivations if first pass is clean
+
 ---
 
 ## 6. Open Questions
@@ -336,18 +398,21 @@ settled when their relevant section is reached.
   agreed (dual LaTeX + SymPy representation, step type 
   classification) but concrete field names and types not yet 
   specified. Will be settled when we design the data model.
+  
 - **Identity database seed list and schema.** Scope agreed 
   (~50–100 entries across the 4 domains) but no concrete list or 
   structure yet. Will be settled in Section 8.
-- **Feasibility spike specifics.** General shape agreed (test LLM 
-  SymPy translation, SymPy success rate, identity matching) but 
-  exact test derivations, success criteria, and decision rules 
-  not yet specified. Will be settled at the start of Section 2.
-- **Agent loop design details.** Using LangGraph agreed, ReAct 
-  pattern agreed, but tool sequencing, retry logic, and error 
-  handling not yet specified. Will be settled in Section 9.
-- **Learning resources for each section.** Will be suggested at 
-  the start of each relevant section, not front-loaded.
+
+- **Feasibility spike specifics — partially resolved.** Four 
+  experiments defined with preliminary success thresholds (logged 
+  in Section 5, Section 2 entry). Remaining unknowns: exact 15–20 
+  test derivations, final prompt template for Experiment 1, and 
+  whether DeepSeek R1/R2/V3.2 is the right choice. Will be fully 
+  closed when the spike concludes.
+
+  - **DeepSeek model for the spike.** Original plan (Section 2.3) 
+  specified R1. R2 and V3.2 have since been released. Decision 
+  deferred to DeepSeek setup session.
 
 ---
 
@@ -374,7 +439,7 @@ settled when their relevant section is reached.
 **Containerization:** Docker (backend only, Month 7)
 
 **LLMs used:**
-- DeepSeek R1 — primary reasoning
+- DeepSeek (model TBD — R1/R2/V3.2 decision deferred to Section 2 spike) — primary reasoning
 - Claude Sonnet 4.6 — fallback for hard derivations
 - Claude Opus 4.7 — evaluation judge
 
