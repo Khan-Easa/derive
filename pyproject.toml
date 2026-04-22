@@ -8,7 +8,10 @@ authors = [
     { name = "Khan Easa", email = "easabingias@gmail.com" }
 ]
 license = { text = "MIT" }
-dependencies = []
+dependencies = [
+    "anthropic>=0.96.0",
+    "python-dotenv>=1.2.2",
+]
 
 [build-system]
 requires = ["hatchling"]
