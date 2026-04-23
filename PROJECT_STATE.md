@@ -378,7 +378,6 @@ on top of it.
   time.
 
 **Next up:**
-**Next up:**
 - Author 2 more test derivations independently (classical mechanics 
   and calculus), using em_wave_001 as the authoring template
 - DeepSeek API setup
