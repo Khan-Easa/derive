@@ -378,11 +378,11 @@ on top of it.
   time.
 
 **Next up:**
-- Author 2 more test derivations independently (classical mechanics 
-  and calculus), using em_wave_001 as the authoring template
+- Author calc_taylor_001 (Taylor series of sin(x) around 0), 
+  independently, using em_wave_001 and cm_shm_001 as templates
 - DeepSeek API setup
 - Write Experiment 1 script, run on 3-derivation sample
-- Scale to 15–20 derivations if first pass is clean
+- Scale to 15-20 derivations if first pass is clean
 
 **Findings so far — authoring Derivation 1 (Maxwell's → wave eq.):**
 
@@ -414,6 +414,19 @@ on top of it.
   Note: this derivation is vector-calculus-heavy; calculus and 
   linear algebra test cases expected to shift the balance. 
   Distribution verdict deferred until all 3 test cases authored.
+
+- **SymPy normalization pattern confirmed across domains.** The same 
+  auto-normalization behavior observed in em_wave_001 (grad(0) → 0, 
+  nested derivatives collapsing) also appeared in cm_shm_001 with 
+  fraction cancellation ((-m*g*l*θ)/(m*l²) → -g*θ/l). This is now 
+  treated as a reliable pattern, not a one-off: test cases must 
+  represent transformations SymPy cannot trivially normalize away.
+
+- **Second test case category distribution:** A=1, D=1 out of 2 
+  steps. Combined across em_wave_001 + cm_shm_001: A=4, C=1, D=3, 
+  E=2 out of 10 total steps. A+B+C share = 50%. Still below 60% 
+  green threshold; calc_taylor_001 expected to shift balance toward 
+  B-heavy content.
 
 ---
 
