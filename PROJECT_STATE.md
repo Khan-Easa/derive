@@ -410,7 +410,7 @@ settled when their relevant section is reached.
   whether DeepSeek R1/R2/V3.2 is the right choice. Will be fully 
   closed when the spike concludes.
 
-  - **DeepSeek model for the spike.** Original plan (Section 2.3) 
+- **DeepSeek model for the spike.** Original plan (Section 2.3) 
   specified R1. R2 and V3.2 have since been released. Decision 
   deferred to DeepSeek setup session.
 
