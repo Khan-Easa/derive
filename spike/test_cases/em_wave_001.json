@@ -1,0 +1,84 @@
+{
+  "id": "em_wave_001",
+  "domain": "electromagnetism",
+  "source": "Griffiths, Introduction to Electrodynamics, 4th ed., §9.2.1",
+  "difficulty": "intermediate",
+  "starting_expr_latex": "\\nabla \\times \\vec{E} = -\\frac{\\partial \\vec{B}}{\\partial t}",
+  "target_expr_latex": "\\nabla^2 \\vec{E} = \\mu_0 \\epsilon_0 \\frac{\\partial^2 \\vec{E}}{\\partial t^2}",
+  "context": "In vacuum (no charges, no currents). Given: div(E) = 0, div(B) = 0, and curl(B) = mu_0 * epsilon_0 * dE/dt.",
+  "expected_step_count": 8,
+  "expected_steps": [
+    {
+      "step": 1,
+      "category": "E",
+      "rule": "Apply curl operator to both sides",
+      "latex": "\\nabla \\times (\\nabla \\times \\vec{E}) = \\nabla \\times \\left(-\\frac{\\partial \\vec{B}}{\\partial t}\\right)",
+      "sympy": "Eq(curl_curl_E, curl_of_neg_dB_dt)",
+      "sympy_verifiable": false,
+      "verification_note": "Structural move — applying the same operator to both sides of an equation. SymPy cannot independently verify that the operator was applied correctly."
+    },
+    {
+      "step": 2,
+      "category": "A",
+      "rule": "Pull the scalar -1 out of the curl on the RHS by linearity",
+      "latex": "\\nabla \\times (\\nabla \\times \\vec{E}) = -\\nabla \\times \\frac{\\partial \\vec{B}}{\\partial t}",
+      "sympy": "Eq(curl_curl_E, -curl_of_dB_dt)",
+      "sympy_verifiable": false,
+      "verification_note": "Linearity of curl is a property SymPy does not natively know when curl is represented opaquely."
+    },
+    {
+      "step": 3,
+      "category": "E",
+      "rule": "Commute curl with partial time derivative on the RHS",
+      "latex": "\\nabla \\times (\\nabla \\times \\vec{E}) = -\\frac{\\partial}{\\partial t}(\\nabla \\times \\vec{B})",
+      "sympy": "Eq(curl_curl_E, -Derivative(curl_B, t))",
+      "sympy_verifiable": false,
+      "verification_note": "Commuting spatial and time derivatives is a valid operation on smooth fields, but opaque curl prevents SymPy from seeing the equivalence."
+    },
+    {
+      "step": 4,
+      "category": "C",
+      "rule": "Apply vector identity: curl(curl(E)) = grad(div(E)) - laplacian(E)",
+      "latex": "\\nabla(\\nabla \\cdot \\vec{E}) - \\nabla^2 \\vec{E} = -\\frac{\\partial}{\\partial t}(\\nabla \\times \\vec{B})",
+      "sympy": "Eq(grad_div_E - laplacian_E, -Derivative(curl_B, t))",
+      "sympy_verifiable": false,
+      "verification_note": "Named vector identity. In production, verified via identity-database lookup (Category C), not via SymPy."
+    },
+    {
+      "step": 5,
+      "category": "D",
+      "rule": "Substitute the premise div(E) = 0, which collapses grad(0) = 0",
+      "latex": "-\\nabla^2 \\vec{E} = -\\frac{\\partial}{\\partial t}(\\nabla \\times \\vec{B})",
+      "sympy": "Eq(-laplacian_E, -Derivative(curl_B, t))",
+      "sympy_verifiable": false,
+      "verification_note": "Applying a user-stated premise (div(E) = 0 in vacuum). SymPy normalizes grad(0) = 0 automatically at parse time, so the simplification is folded into the substitution."
+    },
+    {
+      "step": 6,
+      "category": "D",
+      "rule": "Substitute the premise curl(B) = mu_0 * epsilon_0 * dE/dt (Ampere-Maxwell in vacuum)",
+      "latex": "-\\nabla^2 \\vec{E} = -\\frac{\\partial}{\\partial t}\\left(\\mu_0 \\epsilon_0 \\frac{\\partial \\vec{E}}{\\partial t}\\right)",
+      "sympy": "Eq(-laplacian_E, -Derivative(mu_0 * epsilon_0 * Derivative(E, t), t))",
+      "sympy_verifiable": false,
+      "verification_note": "Substituting a user-stated premise. Category D — verified by LLM judge."
+    },
+    {
+      "step": 7,
+      "category": "A",
+      "rule": "Pull constants mu_0 and epsilon_0 out of the time derivative and collapse to second derivative",
+      "latex": "-\\nabla^2 \\vec{E} = -\\mu_0 \\epsilon_0 \\frac{\\partial^2 \\vec{E}}{\\partial t^2}",
+      "sympy": "Eq(-laplacian_E, -mu_0 * epsilon_0 * Derivative(E, t, 2))",
+      "sympy_verifiable": true,
+      "verification_note": "Linearity of d/dt with constant coefficients, combined with the collapse of nested Derivative calls. SymPy handles both via simplify()."
+    },
+    {
+      "step": 8,
+      "category": "A",
+      "rule": "Multiply both sides by -1",
+      "latex": "\\nabla^2 \\vec{E} = \\mu_0 \\epsilon_0 \\frac{\\partial^2 \\vec{E}}{\\partial t^2}",
+      "sympy": "Eq(laplacian_E, mu_0 * epsilon_0 * Derivative(E, t, 2))",
+      "sympy_verifiable": true,
+      "verification_note": "Negation of both sides. SymPy verifies via simplify(lhs_old - (-lhs_new)) == 0."
+    }
+  ]
+}

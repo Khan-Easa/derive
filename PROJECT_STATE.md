@@ -1,6 +1,6 @@
 # Derivé — Project State
 
-**Last updated:** 2026-04-22
+**Last updated:** 2026-04-23
 **Current section:** Section 2 — SymPy feasibility spike (in progress)
 
 ---
@@ -378,14 +378,43 @@ on top of it.
   time.
 
 **Next up:**
-- Author Maxwell's → wave equation test derivation (from Griffiths 
-  Ch. 9.2) together as a worked example
+**Next up:**
 - Author 2 more test derivations independently (classical mechanics 
-  and calculus)
-- Validate test case schema and data shape
+  and calculus), using em_wave_001 as the authoring template
 - DeepSeek API setup
 - Write Experiment 1 script, run on 3-derivation sample
 - Scale to 15–20 derivations if first pass is clean
+
+**Findings so far — authoring Derivation 1 (Maxwell's → wave eq.):**
+
+- **Product insight refined: Derivé fills *non-trivial* gaps.** The 
+  core value is expanding the derivation steps textbook authors 
+  skip — but not every transformation warrants a step. Trivial 
+  normalizations (grad(0) → 0, Derivative(Derivative(E, t), t) → 
+  Derivative(E, t, 2)) should be folded into adjacent non-trivial 
+  steps, not listed separately. Authoring principle: each step 
+  must represent a transformation a student could plausibly be 
+  stuck on.
+
+- **SymPy aggressively normalizes at parse time.** Any transformation 
+  SymPy considers trivial will be pre-applied during sympify(). 
+  Test case steps that represent only such transformations will 
+  appear identical to their predecessor. Validator catches this by 
+  detecting duplicate parsed forms.
+
+- **Representation convention for vector calculus (Approach 3 — 
+  hybrid):** vector fields (E, B) and vector operators (curl_E, 
+  laplacian_E, etc.) are opaque SymPy Function(t) objects — 
+  time-dependent so Derivative() works, but otherwise symbolic. 
+  This makes Category A/B steps SymPy-verifiable while Category 
+  C/D/E steps are marked sympy_verifiable=false and deferred to 
+  identity lookup, LLM judge, or structural checks.
+
+- **First test case category distribution:** A=3, C=1, D=2, E=2 
+  out of 8 steps. A+B+C share = 50%, below the 60% green threshold. 
+  Note: this derivation is vector-calculus-heavy; calculus and 
+  linear algebra test cases expected to shift the balance. 
+  Distribution verdict deferred until all 3 test cases authored.
 
 ---
 
