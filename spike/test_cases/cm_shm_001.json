@@ -1,0 +1,30 @@
+{
+  "id": "cm_shm_001",
+  "domain": "classical_mechanics",
+  "source": "MIT OCW 8.01 Classical Mechanics, §24.1.1 Simple Pendulum: Torque Approach",
+  "difficulty": "beginner",
+  "starting_expr_latex": "-mgl \\sin\\theta = ml^2 \\frac{d^2 \\theta}{dt^2}",
+  "target_expr_latex": "\\frac{d^2 \\theta}{dt^2} = -\\frac{g}{l} \\theta",
+  "context": "Small-angle approximation, sin(θ) ≈ θ for small θ",
+  "expected_step_count": 2,
+  "expected_steps": [
+    {
+      "step": 1,
+      "category": "A",
+      "rule": "Divide both sides by ml^2",
+      "latex": "\\frac{-mgl \\sin\\theta}{ml^2} = \\frac{ml^2 \\frac{d^2 \\theta}{dt^2}}{ml^2}",
+      "sympy": "Eq((-m * g * l * sin(theta)) / (m * l**2), Derivative(theta, t, 2))",
+      "sympy_verifiable": true,
+      "verification_note": "Division of both sides by ml^2. SymPy auto-cancels the RHS (m*l^2)/(m*l^2) → 1 at parse time; the remaining equivalence is verified via simplify()."
+    },
+    {
+      "step": 2,
+      "category": "D",
+      "rule": "Apply small-angle approximation sin(θ) ≈ θ and simplify RHS",
+      "latex": "\\frac{d^2 \\theta}{dt^2} = -\\frac{g}{l} \\theta",
+      "sympy": "Eq(Derivative(theta, t, 2), -g * theta / l)",
+      "sympy_verifiable": false,
+      "verification_note": "Applying a user-stated approximation (sin(θ) ≈ θ). The subsequent simplification of (-m*g*l*θ)/(m*l^2) to -g*θ/l is folded in — SymPy normalizes it automatically at parse time. Category D — verified by LLM judge."
+    }
+  ]
+}

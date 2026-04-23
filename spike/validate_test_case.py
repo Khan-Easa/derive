@@ -1,8 +1,9 @@
+# ruff: noqa: N816
+
 import json
 from pathlib import Path
 
-from sympy import Function, symbols, Derivative, Eq, sympify
-
+from sympy import Derivative, Eq, Function, sin, symbols, sympify
 
 # Build the SymPy parsing context.
 # These are all the named objects that can appear in a test case's sympy field.
@@ -12,6 +13,10 @@ mu_0, epsilon_0 = symbols("mu_0 epsilon_0", positive=True)
 # Vector fields as time-dependent Functions (so Derivative(E, t) works):
 E = Function("E")(t)
 B = Function("B")(t)
+
+# Classical mechanics — pendulum context
+theta = Function("theta")(t)
+g, l, m = symbols("g l m", positive=True)  # noqa: E741
 
 # Vector operators on fields — as time-dependent Functions so they
 # can appear inside Derivative() as well.
@@ -49,9 +54,15 @@ SYMPY_CONTEXT = {
     "curl_of_neg_dB_dt": curl_of_neg_dB_dt,
     "curl_of_dB_dt": curl_of_dB_dt,
     "grad_of_zero": grad_of_zero,
+    "theta": theta,
+    "g": g,
+    "l": l,
+    "m": m,
+    "sin": sin,
     "Derivative": Derivative,
     "Eq": Eq,
 }
+
 
 def validate_test_case(path: Path) -> bool:
     """Load a test case JSON and verify all sympy strings parse."""
@@ -84,6 +95,10 @@ def validate_test_case(path: Path) -> bool:
 
 
 if __name__ == "__main__":
-    path = Path("spike/test_cases/em_wave_001.json")
-    success = validate_test_case(path)
-    exit(0 if success else 1)
+    test_case_dir = Path("spike/test_cases")
+    all_passed = True
+    for path in sorted(test_case_dir.glob("*.json")):
+        if not validate_test_case(path):
+            all_passed = False
+        print()
+    exit(0 if all_passed else 1)
